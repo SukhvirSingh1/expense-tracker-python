@@ -12,4 +12,5 @@ A GUI-based expense tracker built with Python and Tkinter.
 ## Usage
 1. Install Python
 2. Install required libraries (if any)
-3. Run:
+3. Run:python main.py
+
