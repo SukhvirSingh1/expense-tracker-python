@@ -1,0 +1,22 @@
+[
+    {
+        "item": "phone",
+        "amount": 1100.0
+    },
+    {
+        "item": "watch",
+        "amount": 650.0
+    },
+    {
+        "item": "food",
+        "amount": 100.0
+    },
+    {
+        "item": "ring",
+        "amount": 10000.0
+    },
+    {
+        "item": "car",
+        "amount": 50000.0
+    }
+]
