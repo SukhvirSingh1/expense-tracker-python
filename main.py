@@ -1,6 +1,8 @@
 import json
 import tkinter as tk
 from tkinter import messagebox,simpledialog
+from datetime import date
+
 
 expenses = []
 
@@ -24,10 +26,12 @@ class ExpenseTracker:
             
     # FUNCTIONS
         
-    def add_expenses(self,item,amount):
+    def add_expenses(self,item,amount,category,date):
         self.expenses.append({
             "item":item,
-            "amount":amount
+            "amount":amount,
+            "category":category,
+            "date":date
         })
         self.save_expenses()
         print("Expense added!\n")
@@ -39,7 +43,7 @@ class ExpenseTracker:
         
         print("\nYour Expenses")
         for i,e in enumerate(self.expenses,start=1):
-            print(f"{i}:{e['item']} - {e['amount']}")
+            print(f"{i}:{e['item']} - {e['amount']} - {e['category']} - {e['date']}")
         print()
         
     def total_expenses(self):
@@ -59,11 +63,19 @@ def add_expense_gui():
 
     try:
         amount = float(simpledialog.askstring("Amount","Enter your amount:"))
+        
     except(ValueError,TypeError):
         messagebox.showerror("Error","Invalid input")
         return
         
-    tracker.add_expenses(item,amount)
+    category = simpledialog.askstring("Category","In which category:")
+    if not category:
+            return
+        
+        
+    today_date = str(date.today())
+        
+    tracker.add_expenses(item,amount,category,today_date)
     messagebox.showinfo("Success","Expense added!")
     
 def view_expenses_gui():
@@ -73,8 +85,8 @@ def view_expenses_gui():
         
     text = "Your Expenses\n\n"
     for i,e in enumerate(tracker.expenses,start=1):
-        text += (f"{i}.{e['item']} - {e['amount']}\n")  
-    messagebox.showinfo("Your Expenses",f"Total expense:{text}")
+        text += (f"{i}.{e['item']} - {e['amount']} - {e['category']} - {e['date']}\n")  
+    messagebox.showinfo("Your Expenses",text)
     
 def sum_expenses_gui():
     if not tracker.expenses:
