@@ -95,6 +95,23 @@ def sum_expenses_gui():
     total = sum(e["amount"] for e in tracker.expenses)
     messagebox.showinfo("Sum of your expenses",total)
     
+def dlt_expenses_gui():
+    if not tracker.expenses:
+        messagebox.showinfo("Expenses","No expenses yet!")
+        return
+    try:
+        index = int(simpledialog.askstring("Epxense","What you want to delete:"))
+        if index < 1 or index > len(tracker.expenses):
+            messagebox.showinfo("Error","Expense NOt Found")
+            return
+    except(ValueError,TypeError):
+        return
+            
+    deleted = tracker.expenses.pop(index-1)
+    
+    tracker.save_expenses()
+    messagebox.showinfo("Expenses",f"Your expense:{deleted['item']} - {deleted['amount']}")
+    
     
 
 root = tk.Tk()
@@ -112,6 +129,9 @@ btn_view.pack(pady=5)
 
 btn_sum=tk.Button(root,text="Sum Expenses",width=25,command=sum_expenses_gui)
 btn_sum.pack(pady=5)
+
+btn_dlt=tk.Button(root,text="Delete Expense",width=25,command=dlt_expenses_gui)
+btn_dlt.pack(pady=5)
 
 root.mainloop()
 
