@@ -112,6 +112,29 @@ def dlt_expenses_gui():
     tracker.save_expenses()
     messagebox.showinfo("Expenses",f"Your expense:{deleted['item']} - {deleted['amount']}")
     
+def monthly_filter_gui():
+    if not tracker.expenses:
+        messagebox.showinfo("Monthly Filter","No Expenses yet")
+        return
+    month = simpledialog.askstring("Monthly Filter","Enter (YYYY - MM):")
+    if not month:
+        return
+    filtered = []
+    for e in tracker.expenses:
+        if e["date"].startswith(month):
+            filtered.append(e)
+        
+    if not  filtered:
+        messagebox.showinfo("Monthly Filter","No Expense Found")
+        return
+    
+    text = f"Filtered for this {month}\n\n"    
+    for i,e in enumerate(filtered,start=1):
+        text += (f"{i}.{e['item']} - {e['amount']} - {e['category']} - {e['date']}")
+        
+    messagebox.showinfo("Monthly Filter",text)    
+    
+    
     
 
 root = tk.Tk()
@@ -132,6 +155,9 @@ btn_sum.pack(pady=5)
 
 btn_dlt=tk.Button(root,text="Delete Expense",width=25,command=dlt_expenses_gui)
 btn_dlt.pack(pady=5)
+
+btn_monthly_filter=tk.Button(root,text="Monthly Filter",width=25,command=monthly_filter_gui)
+btn_monthly_filter.pack(pady=5)
 
 root.mainloop()
 
