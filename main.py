@@ -6,7 +6,7 @@ import sqlite3
 
 
 
-def init_db():
+def init_db(): # Database for ExpenseTracker
         conn = sqlite3.connect("expenses.db")
         cur = conn.cursor()
         
@@ -22,10 +22,7 @@ def init_db():
         conn.commit()
         conn.close()
 class ExpenseTracker:        
-            
-    # def __init__(self,filename='expense.json'):
-    #     self.filename = filename
-    #     self.expenses = self.load_expenses()
+
         
     # LOADING SYSTEM
       
@@ -50,13 +47,11 @@ class ExpenseTracker:
         except FileNotFoundError:
             return[]
     
-    # def save_expenses(self):
-    #     with open(self.filename,"w") as f:
-    #         json.dump(self.expenses,f,indent=4)
+
             
     # FUNCTIONS
         
-    def add_expenses(self,item,amount,category,date):
+    def add_expenses(self,item,amount,category,date):   #Adds data into database like item,amount,category,date
         conn = sqlite3.connect("expenses.db")
         cur = conn.cursor()
         
@@ -69,7 +64,7 @@ class ExpenseTracker:
         
         print("Expense added!\n")
     
-    def view_expenses(self):
+    def view_expenses(self):    # view all the data in database
         conn = sqlite3.connect("expenses.db")
         cur = conn.cursor()
         
@@ -79,12 +74,12 @@ class ExpenseTracker:
         return rows
     
 
-    def total_expenses(self):
+    def total_expenses(self):  #Total all the expenses in database
         expenses = tracker.view_expenses()
         total = sum(e[2] for e in expenses)
         print(f"\nTotal spent:{total}\n")
         
-    def dlt_expenses(self,expense_id):
+    def dlt_expenses(self,expense_id):  #deletes the data in database
         conn=sqlite3.connect("expenses.db")
         cur=conn.cursor()
         cur.execute("DELETE FROM expenses WHERE id=?",(expense_id))
@@ -98,7 +93,7 @@ init_db()
 
 # GUI FUNCTIONS
 
-def add_expense_gui():
+def add_expense_gui(): #add Add function to GUI
     item = simpledialog.askstring("Add expense","What did you spend on:")
     if not item:
         return
@@ -120,7 +115,7 @@ def add_expense_gui():
     tracker.add_expenses(item,amount,category,today_date)
     messagebox.showinfo("Success","Expense added!")
     
-def view_expenses_gui():
+def view_expenses_gui(): #Add view function to GUI
     expenses = tracker.view_expenses()
     if not expenses:
         messagebox.showinfo("Expenses","No Expenses yet")
@@ -131,7 +126,7 @@ def view_expenses_gui():
         text += (f"{i}.{e[1]} - {e[2]} - {e[3]} - {e[4]}\n")  
     messagebox.showinfo("Your Expenses",text)
     
-def sum_expenses_gui():
+def sum_expenses_gui(): #Add sum function to GUI
     expenses = tracker.view_expenses()
     if not expenses:
         messagebox.showinfo("Expenses","No Expenses yet")
@@ -139,7 +134,7 @@ def sum_expenses_gui():
     total = sum(e[2] for e in expenses)
     messagebox.showinfo("Sum of your expenses",total)
     
-def dlt_expenses_gui():
+def dlt_expenses_gui():   #Add delete function to GUI
     expense_id = simpledialog.askstring("DELETE MENU","What you want to delete")
     if not expense_id:
         return
@@ -148,7 +143,7 @@ def dlt_expenses_gui():
     
     messagebox.showinfo("Expenses",f"Your expense with id {expense_id} deleted")
     
-def monthly_filter_gui():
+def monthly_filter_gui(): #Add monthly filter to GUI
     if not tracker.expenses:
         messagebox.showinfo("Monthly Filter","No Expenses yet")
         return
@@ -171,7 +166,7 @@ def monthly_filter_gui():
     messagebox.showinfo("Monthly Filter",text)    
     
     
-    
+    #  GUI system
 
 root = tk.Tk()
 root.title("Sukha's Expense Tracker")
