@@ -4,10 +4,10 @@ from datetime import date
 import sqlite3
 
 
-
+db = "expenses.db"
 
 def init_db(): # Database for ExpenseTracker
-        conn = sqlite3.connect("expenses.db")
+        conn = sqlite3.connect(db)
         cur = conn.cursor()
         
         cur.execute("""
@@ -28,7 +28,7 @@ class ExpenseTracker:
       
     def load_expenses(self):
         try:
-            conn = sqlite3.connect("expenses.db")
+            conn = sqlite3.connect(db)
             cur = conn.cursor()
             
             cur.execute("SELECT id, item, amount, category, date FROM expenses")
@@ -52,26 +52,24 @@ class ExpenseTracker:
     # FUNCTIONS
         
     def add_expenses(self,item,amount,category,date):   #Adds data into database like item,amount,category,date
-        conn = sqlite3.connect("expenses.db")
-        cur = conn.cursor()
+        with sqlite3.connect(db) as conn:
+            cur = conn.cursor()
         
-        cur.execute(
+            cur.execute(
             "INSERT INTO expenses (item, amount, category, date) VALUES (?, ?, ?, ?)",
             (item, amount, category, date)
             )
         conn.commit()
-        conn.close()
         
         print("Expense added!\n")
     
     def view_expenses(self):    # view all the data in database
-        conn = sqlite3.connect("expenses.db")
-        cur = conn.cursor()
+        with sqlite3.connect(db) as conn:
+            cur = conn.cursor()
         
-        cur.execute("SELECT id, item, amount, category, date FROM expenses")
-        rows = cur.fetchall()
-        conn.close()
-        return rows
+            cur.execute("SELECT id, item, amount, category, date FROM expenses")
+            rows = cur.fetchall()
+            return rows
     
 
     def total_expenses(self):  #Total all the expenses in database
@@ -80,11 +78,10 @@ class ExpenseTracker:
         print(f"\nTotal spent:{total}\n")
         
     def dlt_expenses(self,expense_id):  #deletes the data in database
-        conn=sqlite3.connect("expenses.db")
-        cur=conn.cursor()
-        cur.execute("DELETE FROM expenses WHERE id=?",(expense_id))
-        conn.commit()
-        conn.close()
+        with sqlite3.connect(db) as conn:
+            cur=conn.cursor()
+            cur.execute("DELETE FROM expenses WHERE id=?",(expense_id,))
+            conn.commit()
         
         # MENU (GUI)
         
@@ -100,6 +97,9 @@ def add_expense_gui(): #add Add function to GUI
 
     try:
         amount = float(simpledialog.askstring("Amount","Enter your amount:"))
+        if amount <= 0:
+            messagebox.showerror("Invalid Input","Amount can not be negetive")
+            return
         
     except(ValueError,TypeError):
         messagebox.showerror("Error","Invalid input")
